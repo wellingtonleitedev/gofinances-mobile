@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components/native';
-import { TypeEnum } from '.';
 import font from '../../constants/font';
+import { TypeEnum } from '.';
 
 interface OptionProps {
   selected: boolean;
@@ -27,6 +27,7 @@ export const Option = styled.TouchableOpacity<OptionProps>`
     props.type === TypeEnum.income &&
     css`
       background: rgba(18, 164, 84, 0.1);
+      border: 1px solid rgba(18, 164, 84, 0.1);
     `};
 
   ${props =>
@@ -34,6 +35,7 @@ export const Option = styled.TouchableOpacity<OptionProps>`
     props.type === TypeEnum.outcome &&
     css`
       background: rgba(232, 63, 91, 0.1);
+      border: 1px solid rgba(232, 63, 91, 0.1);
     `};
 `;
 

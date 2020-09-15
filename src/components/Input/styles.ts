@@ -1,11 +1,14 @@
 import styled from 'styled-components/native';
 import font from '../../constants/font';
 
-export const TextInput = styled.TextInput`
+interface InputProps {
+  errored: boolean;
+}
+
+export const TextInput = styled.TextInput<InputProps>`
   background: #fff;
-  border-color: #fff;
+  border-color: ${props => (props.errored ? '#E83F5B' : '#fff')};
   border-radius: 5px;
-  flex-direction: row;
   margin-bottom: 16px;
   padding: 0 16px;
   height: 50px;
@@ -14,4 +17,9 @@ export const TextInput = styled.TextInput`
   font-size: 14px;
 `;
 
-export const Error = styled.View``;
+export const Error = styled.Text`
+  color: #e83f5b;
+  font-family: ${font.regular};
+  font-size: 12px;
+  margin: -12px 0 12px 6px;
+`;

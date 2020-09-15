@@ -11,7 +11,17 @@ import {
   Value,
 } from './styles';
 
-const Balance: React.FC = () => {
+interface BalanceProps {
+  data: Balance;
+}
+
+interface Balance {
+  income: string;
+  outcome: string;
+  total: string;
+}
+
+const Balance: React.FC<BalanceProps> = ({ data }) => {
   return (
     <>
       <BalanceContainer />
@@ -26,21 +36,21 @@ const Balance: React.FC = () => {
             <Text>Entradas</Text>
             <Income />
           </BalanceHeader>
-          <Value>R$ 1.400,00</Value>
+          <Value>{data.income}</Value>
         </BalanceCard>
         <BalanceCard>
           <BalanceHeader>
             <Text>Saídas</Text>
             <Outcome />
           </BalanceHeader>
-          <Value>R$ 1.400,00</Value>
+          <Value>{data.outcome}</Value>
         </BalanceCard>
         <BalanceCard style={{ backgroundColor: '#FF872C' }}>
           <BalanceHeader>
             <Text style={{ color: '#FFF' }}>Total</Text>
             <Total />
           </BalanceHeader>
-          <Value style={{ color: '#FFF' }}>R$ 1.400,00</Value>
+          <Value style={{ color: '#FFF' }}>{data.total}</Value>
         </BalanceCard>
       </ScrollView>
     </>

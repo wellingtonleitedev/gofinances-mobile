@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { RectButton } from 'react-native-gesture-handler';
 import font from '../../constants/font';
 
 export const Container = styled.View`
@@ -13,7 +12,14 @@ export const Title = styled.Text`
   margin-bottom: 14px;
 `;
 
-export const Button = styled(RectButton)`
+export const Error = styled.Text`
+  color: #e83f5b;
+  font-family: ${font.regular};
+  font-size: 12px;
+  margin: -12px 0 12px 6px;
+`;
+
+export const Button = styled.TouchableOpacity`
   align-items: center;
   background: #ff872c;
   border-radius: 5px;

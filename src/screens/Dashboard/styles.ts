@@ -2,6 +2,10 @@ import styled from 'styled-components/native';
 import { FlatList, Dimensions } from 'react-native';
 import font from '../../constants/font';
 
+interface ValueProps {
+  type: 'income' | 'outcome';
+}
+
 export const Container = styled.View`
   height: 53%;
 `;
@@ -32,8 +36,8 @@ export const CardTitle = styled.Text`
   font-size: 14px;
 `;
 
-export const Value = styled.Text`
-  color: #12a454;
+export const Value = styled.Text<ValueProps>`
+  color: ${props => (props.type === 'income' ? '#12a454' : '#E83F5B')};
   font-family: ${font.medium};
   font-size: 20px;
 `;
