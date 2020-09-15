@@ -24,7 +24,7 @@ const Create: React.FC = () => {
   const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
-    async (data: Transaction, { reset }) => {
+    async (data: Transaction, { reset }): Promise<void> => {
       formRef.current?.setErrors({});
       try {
         const schema = Yup.object().shape({
@@ -40,7 +40,8 @@ const Create: React.FC = () => {
         });
 
         if (!type) {
-          return setError('Tipo da transação é obrigatório');
+          setError('Tipo da transação é obWrigatório');
+          return;
         }
 
         await api.post('/transactions', { ...data, type });
@@ -48,9 +49,9 @@ const Create: React.FC = () => {
         reset();
 
         navigate('Dashboard');
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = errorHandling(error);
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = errorHandling(err);
           formRef.current?.setErrors(errors);
           return;
         }
@@ -61,7 +62,7 @@ const Create: React.FC = () => {
         );
       }
     },
-    [type, navigate],
+    [navigate, type],
   );
 
   return (
