@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Balance from '../../components/Balance';
-import Header from '../../components/Header';
-import api from '../../services/api';
-import { formatDate, formatValue } from '../../utils/format';
+import TransactionCollection from '../../collections/TransactionsCollection';
+import Balance from '../../../../components/Balance';
+import Header from '../../../../components/Header';
+import api from '../../../../services/api';
+import { formatDate, formatValue } from '../../../../utils/format';
 import {
   Container,
   Content,
@@ -70,7 +71,17 @@ const Dashboard: React.FC = () => {
     }
 
     loadTransactions();
-  }, [formatValue, formatDate]);
+  }, []);
+
+  useEffect(() => {
+    async function getTransactions(): Promise<void> {
+      const result = await TransactionCollection.query().fetch();
+
+      console.log({ result });
+    }
+
+    getTransactions();
+  }, []);
 
   return (
     <>

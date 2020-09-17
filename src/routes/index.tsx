@@ -2,8 +2,8 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Dashboard from '../screens/Dashboard';
-import Create from '../screens/Create';
+import Dashboard from '../modules/transactions/screens/Dashboard';
+import Create from '../modules/transactions/screens/Create';
 import font from '../constants/font';
 
 const Tab = createBottomTabNavigator();
@@ -22,7 +22,7 @@ const Routes: React.FC = () => {
         }}
       >
         <Tab.Screen
-          name="Dashboard"
+          name="Listagem"
           options={{
             tabBarIcon: ({ focused }) => (
               <Icon

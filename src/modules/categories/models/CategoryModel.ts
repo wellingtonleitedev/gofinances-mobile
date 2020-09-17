@@ -10,7 +10,7 @@ export default class Category extends Model {
 
   @field('title') title: string;
 
-  @date('created_at') created_at: string;
+  @date('created_at') createdAt: number;
 
-  @date('updated_at') updated_at: string;
+  @date('updated_at') updatedAt: number;
 }

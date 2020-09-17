@@ -1,6 +1,6 @@
 import { Model } from '@nozbe/watermelondb';
 import { field, date, relation } from '@nozbe/watermelondb/decorators';
-import Category from './Category';
+import Category from '../../categories/models/CategoryModel';
 
 export default class Transaction extends Model {
   static table = 'transactions';
@@ -15,11 +15,11 @@ export default class Transaction extends Model {
 
   @field('value') value: string;
 
-  @field('category_id') category_id: string;
+  @field('category_id') categoryId: string;
 
   @relation('categories', 'category_id') category: Category;
 
-  @date('created_at') created_at: string;
+  @date('created_at') createdAt: number;
 
-  @date('updated_at') updated_at: string;
+  @date('updated_at') updatedAt: number;
 }

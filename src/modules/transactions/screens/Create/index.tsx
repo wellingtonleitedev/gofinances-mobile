@@ -4,11 +4,11 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
-import Header from '../../components/Header';
-import Input from '../../components/Input';
-import TypeSelect from '../../components/TypeSelect';
-import api from '../../services/api';
-import errorHandling from '../../utils/errorHandling';
+import Header from '../../../../components/Header';
+import Input from '../../../../components/Input';
+import TypeSelect from '../../../../components/TypeSelect';
+import api from '../../../../services/api';
+import errorHandling from '../../../../utils/errorHandling';
 import { Container, Title, Error, Button, Text } from './styles';
 
 interface Transaction {
@@ -48,7 +48,7 @@ const Create: React.FC = () => {
 
         reset();
 
-        navigate('Dashboard');
+        navigate('Listagem');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = errorHandling(err);

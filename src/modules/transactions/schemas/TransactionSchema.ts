@@ -7,8 +7,8 @@ const TransactionSchema = tableSchema({
     { name: 'type', type: 'string' },
     { name: 'value', type: 'string' },
     { name: 'category_id', type: 'string' },
-    { name: 'created_at', type: 'string' },
-    { name: 'updated_at', type: 'string' },
+    { name: 'created_at', type: 'number' },
+    { name: 'updated_at', type: 'number' },
   ],
 });
 
