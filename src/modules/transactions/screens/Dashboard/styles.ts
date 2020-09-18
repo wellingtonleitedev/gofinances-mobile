@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { FlatList, Dimensions } from 'react-native';
-import font from '../../constants/font';
+import { FlatList } from 'react-native';
+import font from '../../../../constants/font';
 
 interface ValueProps {
   type: 'income' | 'outcome';

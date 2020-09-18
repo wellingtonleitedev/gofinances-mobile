@@ -1,9 +1,9 @@
 import { Database } from '@nozbe/watermelondb';
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite';
 
-import schema from './schema';
-import Category from '../modules/categories/models/CategoryModel';
-import Transaction from '../modules/transactions/models/TransactionModel';
+import schema from 'src/schemas';
+import Category from 'src/modules/categories/infra/models/Category';
+import Transaction from 'src/modules/transactions/infra/models/Transaction';
 
 const adapter = new SQLiteAdapter({
   schema,

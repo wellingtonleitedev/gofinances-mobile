@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import TransactionCollection from '../../collections/TransactionsCollection';
+import withObservables from '@nozbe/with-observables';
 import Balance from '../../../../components/Balance';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
 import { formatDate, formatValue } from '../../../../utils/format';
+import GetTransactionsService from '../../services/GetTransactionsService';
 import {
   Container,
   Content,
@@ -35,53 +36,71 @@ interface IBalance {
 }
 
 const Dashboard: React.FC = () => {
-  const [transactions, setTransactions] = useState([]);
+  const [transaction, setTransaction] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<IBalance>({} as IBalance);
+
+  console.log({ transaction });
+
+  // useEffect(() => {
+  //   async function loadTransactions(): Promise<void> {
+  //     const { data } = await api.get('/transactions');
+
+  //     const transactionsFormatted = data.transactions.map(
+  //       (transaction: Transaction) => {
+  //         let formattedValue = formatValue(transaction.value);
+
+  //         if (transaction.type === 'outcome') {
+  //           formattedValue = `- ${formattedValue}`;
+  //         }
+
+  //         const formattedDate = formatDate(transaction.created_at);
+
+  //         return {
+  //           ...transaction,
+  //           formattedValue,
+  //           formattedDate,
+  //         };
+  //       },
+  //     );
+
+  //     const balanceFormatted = {
+  //       income: formatValue(data.balance.income),
+  //       outcome: formatValue(data.balance.outcome),
+  //       total: formatValue(data.balance.total),
+  //     };
+
+  //     setBalance(balanceFormatted);
+  //     setTransactions(transactionsFormatted);
+  //   }
+
+  //   loadTransactions();
+  // }, []);
+
+  // useEffect(() => {
+  //   async function getTransactions(): Promise<void> {
+  //     const result = await TransactionCollection.query().fetch();
+
+  //     console.log({ result });
+  //   }
+
+  //   getTransactions();
+  // }, []);
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
-      const { data } = await api.get('/transactions');
+      const getTransactions = new GetTransactionsService();
 
-      const transactionsFormatted = data.transactions.map(
-        (transaction: Transaction) => {
-          let formattedValue = formatValue(transaction.value);
+      const response = await getTransactions.execute();
 
-          if (transaction.type === 'outcome') {
-            formattedValue = `- ${formattedValue}`;
-          }
+      console.log({ response });
 
-          const formattedDate = formatDate(transaction.created_at);
+      const transactions = response.map(item => item._raw);
 
-          return {
-            ...transaction,
-            formattedValue,
-            formattedDate,
-          };
-        },
-      );
-
-      const balanceFormatted = {
-        income: formatValue(data.balance.income),
-        outcome: formatValue(data.balance.outcome),
-        total: formatValue(data.balance.total),
-      };
-
-      setBalance(balanceFormatted);
-      setTransactions(transactionsFormatted);
+      setTransaction(response);
     }
 
     loadTransactions();
-  }, []);
-
-  useEffect(() => {
-    async function getTransactions(): Promise<void> {
-      const result = await TransactionCollection.query().fetch();
-
-      console.log({ result });
-    }
-
-    getTransactions();
-  }, []);
+  });
 
   return (
     <>
@@ -90,8 +109,10 @@ const Dashboard: React.FC = () => {
       <Container>
         <Content>
           <Title>Listagem</Title>
+
+          {/* <EnhancedTransaction transaction={transaction} /> */}
           <List
-            data={transactions}
+            // data={transaction}
             keyExtractor={(_, index) => String(index)}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
@@ -110,5 +131,11 @@ const Dashboard: React.FC = () => {
     </>
   );
 };
+
+const enhance = withObservables(['transaction'], ({ transaction }) => ({
+  transaction,
+}));
+
+const EnhancedTransaction = enhance(Dashboard);
 
 export default Dashboard;

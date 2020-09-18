@@ -10,6 +10,7 @@ import TypeSelect from '../../../../components/TypeSelect';
 import api from '../../../../services/api';
 import errorHandling from '../../../../utils/errorHandling';
 import { Container, Title, Error, Button, Text } from './styles';
+import CreateTransactionService from '../../services/CreateTransactionService';
 
 interface Transaction {
   title: string;
@@ -20,11 +21,13 @@ interface Transaction {
 const Create: React.FC = () => {
   const { navigate } = useNavigation();
   const formRef = useRef<FormHandles>(null);
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState('');
   const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
     async (data: Transaction, { reset }): Promise<void> => {
+      const createTransaction = new CreateTransactionService();
+
       formRef.current?.setErrors({});
       try {
         const schema = Yup.object().shape({
@@ -44,12 +47,15 @@ const Create: React.FC = () => {
           return;
         }
 
-        await api.post('/transactions', { ...data, type });
+        // await api.post('/transactions', { ...data, type });
+
+        await createTransaction.execute({ ...data, type });
 
         reset();
 
         navigate('Listagem');
       } catch (err) {
+        console.log(err);
         if (err instanceof Yup.ValidationError) {
           const errors = errorHandling(err);
           formRef.current?.setErrors(errors);

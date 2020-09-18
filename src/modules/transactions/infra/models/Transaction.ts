@@ -1,6 +1,6 @@
 import { Model } from '@nozbe/watermelondb';
 import { field, date, relation } from '@nozbe/watermelondb/decorators';
-import Category from '../../categories/models/CategoryModel';
+import Category from '../../../categories/infra/models/Category';
 
 export default class Transaction extends Model {
   static table = 'transactions';
@@ -13,7 +13,7 @@ export default class Transaction extends Model {
 
   @field('type') type: string;
 
-  @field('value') value: string;
+  @field('value') value: number;
 
   @field('category_id') categoryId: string;
 
