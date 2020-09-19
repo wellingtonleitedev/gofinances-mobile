@@ -22,11 +22,15 @@ interface Transaction {
   id: string;
   title: string;
   value: number;
-  formattedValue: string;
-  formattedDate: string;
-  type: 'income' | 'outcome';
+  // formattedValue: string;
+  // formattedDate: string;
+  type: string;
   category: { title: string };
-  created_at: Date;
+  createdAt: number;
+}
+
+interface TransactionsProps {
+  transactions: Transaction[];
 }
 
 interface IBalance {
@@ -36,55 +40,8 @@ interface IBalance {
 }
 
 const Dashboard: React.FC = () => {
-  const [transaction, setTransaction] = useState<Transaction[]>([]);
-  const [balance, setBalance] = useState<IBalance>({} as IBalance);
-
-  console.log({ transaction });
-
-  // useEffect(() => {
-  //   async function loadTransactions(): Promise<void> {
-  //     const { data } = await api.get('/transactions');
-
-  //     const transactionsFormatted = data.transactions.map(
-  //       (transaction: Transaction) => {
-  //         let formattedValue = formatValue(transaction.value);
-
-  //         if (transaction.type === 'outcome') {
-  //           formattedValue = `- ${formattedValue}`;
-  //         }
-
-  //         const formattedDate = formatDate(transaction.created_at);
-
-  //         return {
-  //           ...transaction,
-  //           formattedValue,
-  //           formattedDate,
-  //         };
-  //       },
-  //     );
-
-  //     const balanceFormatted = {
-  //       income: formatValue(data.balance.income),
-  //       outcome: formatValue(data.balance.outcome),
-  //       total: formatValue(data.balance.total),
-  //     };
-
-  //     setBalance(balanceFormatted);
-  //     setTransactions(transactionsFormatted);
-  //   }
-
-  //   loadTransactions();
-  // }, []);
-
-  // useEffect(() => {
-  //   async function getTransactions(): Promise<void> {
-  //     const result = await TransactionCollection.query().fetch();
-
-  //     console.log({ result });
-  //   }
-
-  //   getTransactions();
-  // }, []);
+  const [data, setData] = useState<Transaction[]>([]);
+  // const [balance, setBalance] = useState<IBalance>({} as IBalance);
 
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
@@ -92,50 +49,51 @@ const Dashboard: React.FC = () => {
 
       const response = await getTransactions.execute();
 
-      console.log({ response });
-
-      const transactions = response.map(item => item._raw);
-
-      setTransaction(response);
+      setData(response);
     }
 
     loadTransactions();
-  });
+  }, []);
 
-  return (
-    <>
-      <Header />
-      <Balance data={balance} />
-      <Container>
-        <Content>
-          <Title>Listagem</Title>
+  const Transactions: React.FC<TransactionsProps> = ({ transactions }) => {
+    console.log({ transactions });
 
-          {/* <EnhancedTransaction transaction={transaction} /> */}
-          <List
-            // data={transaction}
-            keyExtractor={(_, index) => String(index)}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Card>
-                <CardTitle>{item.title}</CardTitle>
-                <Value type={item.type}>{item.formattedValue}</Value>
-                <Description>
-                  <Category>{item.category.title}</Category>
-                  <Date>{item.formattedDate}</Date>
-                </Description>
-              </Card>
-            )}
-          />
-        </Content>
-      </Container>
-    </>
-  );
+    const newTransactions = [transactions];
+    return (
+      <>
+        <Header />
+        {/* <Balance data={balance} /> */}
+        <Container>
+          <Content>
+            <Title>Listagem</Title>
+            <List
+              data={newTransactions}
+              keyExtractor={(_, index) => String(index)}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <Card>
+                  <CardTitle>{item.title}</CardTitle>
+                  <Value type={item.type}>{item.formattedValue}</Value>
+                  <Description>
+                    <Category>{item.category.title}</Category>
+                    <Date>{item.formattedDate}</Date>
+                  </Description>
+                </Card>
+              )}
+            />
+          </Content>
+        </Container>
+      </>
+    );
+  };
+
+  const enhance = withObservables(['transactions'], ({ transactions }) => ({
+    transactions,
+  }));
+
+  const EnhancedTransaction = enhance(Transactions);
+
+  return <EnhancedTransaction transactions={data} />;
 };
-
-const enhance = withObservables(['transaction'], ({ transaction }) => ({
-  transaction,
-}));
-
-const EnhancedTransaction = enhance(Dashboard);
 
 export default Dashboard;
