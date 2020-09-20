@@ -1,5 +1,6 @@
 import { Model } from '@nozbe/watermelondb';
-import { field, date } from '@nozbe/watermelondb/decorators';
+import { field, children, date } from '@nozbe/watermelondb/decorators';
+import Transaction from '../../../transactions/infra/models/Transaction';
 
 export default class Category extends Model {
   static table = 'categories';
@@ -9,6 +10,8 @@ export default class Category extends Model {
   // };
 
   @field('title') title: string;
+
+  @children('transactions') transactions: Transaction[];
 
   @date('created_at') createdAt: number;
 

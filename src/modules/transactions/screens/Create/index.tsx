@@ -4,13 +4,12 @@ import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+import { useTransactions } from '../../../../hooks/transactions';
 import Header from '../../../../components/Header';
 import Input from '../../../../components/Input';
 import TypeSelect from '../../../../components/TypeSelect';
-import api from '../../../../services/api';
 import errorHandling from '../../../../utils/errorHandling';
 import { Container, Title, Error, Button, Text } from './styles';
-import CreateTransactionService from '../../services/CreateTransactionService';
 
 interface Transaction {
   title: string;
@@ -20,19 +19,18 @@ interface Transaction {
 
 const Create: React.FC = () => {
   const { navigate } = useNavigation();
+  const { addTransaction } = useTransactions();
   const formRef = useRef<FormHandles>(null);
   const [type, setType] = useState('');
   const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
     async (data: Transaction, { reset }): Promise<void> => {
-      const createTransaction = new CreateTransactionService();
-
       formRef.current?.setErrors({});
       try {
         const schema = Yup.object().shape({
           title: Yup.string().required('Nome da transação é obrigatório'),
-          value: Yup.string().required('Valor da transação é obrigatório'),
+          value: Yup.number().required('Valor da transação é obrigatório'),
           category: Yup.string().required(
             'Categoria da transação é obrigatório',
           ),
@@ -47,15 +45,12 @@ const Create: React.FC = () => {
           return;
         }
 
-        // await api.post('/transactions', { ...data, type });
-
-        await createTransaction.execute({ ...data, type });
+        await addTransaction({ ...data, type });
 
         reset();
 
         navigate('Listagem');
       } catch (err) {
-        console.log(err);
         if (err instanceof Yup.ValidationError) {
           const errors = errorHandling(err);
           formRef.current?.setErrors(errors);
@@ -68,7 +63,7 @@ const Create: React.FC = () => {
         );
       }
     },
-    [navigate, type],
+    [navigate, addTransaction, type],
   );
 
   return (

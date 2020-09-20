@@ -10,6 +10,12 @@ interface CreateTransactionDto {
   categoryId: string;
 }
 
+interface Balance {
+  income: number;
+  outcome: number;
+  total: number;
+}
+
 export default class TransactionsCollection implements ITransactionsCollection {
   private collection: Collection<Transaction>;
 
@@ -21,6 +27,29 @@ export default class TransactionsCollection implements ITransactionsCollection {
     const transactions = await this.collection.query().fetch();
 
     return transactions;
+  }
+
+  public async getBalance(): Promise<Balance> {
+    const transactions = await this.collection.query().fetch();
+
+    return transactions.reduce(
+      (accumulator, transaction): Balance => {
+        if (transaction.type === 'income') {
+          accumulator.income += transaction.value;
+        } else {
+          accumulator.outcome += transaction.value;
+        }
+
+        accumulator.total = accumulator.income - accumulator.outcome;
+
+        return accumulator;
+      },
+      {
+        income: 0,
+        outcome: 0,
+        total: 0,
+      },
+    );
   }
 
   public async create({

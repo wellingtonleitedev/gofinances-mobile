@@ -6,7 +6,7 @@ export default class Transaction extends Model {
   static table = 'transactions';
 
   // static associations = {
-  //   categories: { type: 'has_many', foreignKey: 'category_id' },
+  //   category: { type: 'has_one', foreignKey: 'category_id' },
   // };
 
   @field('title') title: string;

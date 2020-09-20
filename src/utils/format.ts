@@ -1,7 +1,7 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: number): string => {
   const value = new Date(date);
 
   return Intl.DateTimeFormat('pt-BR').format(value);
