@@ -6,7 +6,7 @@ const TransactionSchema = tableSchema({
     { name: 'title', type: 'string' },
     { name: 'type', type: 'string' },
     { name: 'value', type: 'number' },
-    { name: 'category_id', type: 'string' },
+    { name: 'category_id', type: 'string', isIndexed: true },
     { name: 'created_at', type: 'number' },
     { name: 'updated_at', type: 'number' },
   ],

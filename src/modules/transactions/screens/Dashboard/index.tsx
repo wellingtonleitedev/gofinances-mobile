@@ -33,8 +33,6 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = () => {
   const { transactions, balance } = useTransactions();
 
-  console.log(transactions);
-
   return (
     <>
       <Header />
@@ -51,7 +49,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                 <CardTitle>{item.title}</CardTitle>
                 <Value type={item.type}>{item.formattedValue}</Value>
                 <Description>
-                  <Category>{item.category.title}</Category>
+                  {/* <Category>{item.category.title}</Category> */}
                   <Date>{item.formattedDate}</Date>
                 </Description>
               </Card>

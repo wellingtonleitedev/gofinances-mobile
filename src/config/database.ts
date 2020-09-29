@@ -7,7 +7,7 @@ import Transaction from '../modules/transactions/infra/models/Transaction';
 
 const adapter = new SQLiteAdapter({
   schema,
-  dbName: 'novotest',
+  dbName: 'novotest2',
 });
 
 const database = new Database({
