@@ -1,19 +1,11 @@
 import React from 'react';
-import { useTransactions } from '../../../../hooks/transactions';
+import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider';
+import withObservables from '@nozbe/with-observables';
+import { Database } from '@nozbe/watermelondb';
+import Transaction from '../../../../components/Transaction';
 import Balance from '../../../../components/Balance';
 import Header from '../../../../components/Header';
-import {
-  Container,
-  Content,
-  Title,
-  List,
-  Card,
-  CardTitle,
-  Value,
-  Description,
-  Category,
-  Date,
-} from './styles';
+import { Container, Content, Title, List } from './styles';
 
 interface Transaction {
   id: string;
@@ -30,13 +22,11 @@ interface DashboardProps {
   transactions: Transaction[];
 }
 
-const Dashboard: React.FC<DashboardProps> = () => {
-  const { transactions, balance } = useTransactions();
-
+const Dashboard: React.FC<DashboardProps> = ({ transactions = [] }) => {
   return (
     <>
       <Header />
-      <Balance data={balance} />
+      <Balance transactions={[transactions]} />
       <Container>
         <Content>
           <Title>Listagem</Title>
@@ -44,15 +34,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
             data={transactions}
             keyExtractor={(_, index) => String(index)}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <Card>
-                <CardTitle>{item.title}</CardTitle>
-                <Value type={item.type}>{item.formattedValue}</Value>
-                <Description>
-                  {/* <Category>{item.category.title}</Category> */}
-                  <Date>{item.formattedDate}</Date>
-                </Description>
-              </Card>
+            renderItem={({ item: transaction }) => (
+              <Transaction transaction={transaction} />
             )}
           />
         </Content>
@@ -61,4 +44,8 @@ const Dashboard: React.FC<DashboardProps> = () => {
   );
 };
 
-export default Dashboard;
+export default withDatabase(
+  withObservables([], ({ database }: { database: Database }) => ({
+    transactions: database.collections.get('transactions').query().observe(),
+  }))(Dashboard),
+);

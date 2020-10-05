@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, TextInput } from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
-import { useTransactions } from '../../../../hooks/transactions';
+import CreateTransactionService from '../../services/CreateTransactionService';
 import Header from '../../../../components/Header';
 import Input from '../../../../components/Input';
 import TypeSelect from '../../../../components/TypeSelect';
@@ -19,13 +19,16 @@ interface Transaction {
 
 const Create: React.FC = () => {
   const { navigate } = useNavigation();
-  const { addTransaction } = useTransactions();
   const formRef = useRef<FormHandles>(null);
+  const valueRef = useRef<TextInput>(null);
+  const categoryRef = useRef<TextInput>(null);
   const [type, setType] = useState('');
   const [error, setError] = useState<string>('');
 
   const handleSubmit = useCallback(
     async (data: Transaction, { reset }): Promise<void> => {
+      const createTransaction = new CreateTransactionService();
+
       formRef.current?.setErrors({});
       try {
         const schema = Yup.object().shape({
@@ -45,7 +48,10 @@ const Create: React.FC = () => {
           return;
         }
 
-        await addTransaction({ ...data, type });
+        await createTransaction.execute({
+          ...data,
+          type,
+        });
 
         reset();
 
@@ -63,7 +69,7 @@ const Create: React.FC = () => {
         );
       }
     },
-    [navigate, addTransaction, type],
+    [navigate, type],
   );
 
   return (
@@ -72,14 +78,30 @@ const Create: React.FC = () => {
       <Container>
         <Title>Cadastro</Title>
         <Form ref={formRef} onSubmit={handleSubmit}>
-          <Input name="title" autoCapitalize="words" placeholder="Nome" />
-          <Input name="value" keyboardType="number-pad" placeholder="Preço" />
+          <Input
+            name="title"
+            autoCapitalize="words"
+            placeholder="Nome"
+            returnKeyType="next"
+            onSubmitEditing={() => valueRef.current?.focus()}
+          />
+          <Input
+            ref={valueRef}
+            name="value"
+            keyboardType="number-pad"
+            placeholder="Preço"
+            returnKeyType="next"
+            onSubmitEditing={() => categoryRef.current?.focus()}
+          />
           <TypeSelect onChange={(value: string) => setType(value)} />
           {!!error && <Error>{error}</Error>}
           <Input
+            ref={categoryRef}
             name="category"
             autoCapitalize="words"
             placeholder="Categoria"
+            returnKeyType="next"
+            onSubmitEditing={() => formRef.current?.submitForm()}
           />
           <Button
             onPress={() => {
