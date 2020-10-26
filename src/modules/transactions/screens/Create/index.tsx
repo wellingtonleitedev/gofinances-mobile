@@ -1,9 +1,16 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Alert, TextInput } from 'react-native';
+import {
+  Alert,
+  TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
+import sync from '../../../../config/sync';
 import CreateTransactionService from '../../services/CreateTransactionService';
 import Header from '../../../../components/Header';
 import Input from '../../../../components/Input';
@@ -67,6 +74,8 @@ const Create: React.FC = () => {
           'Houve um problema com o cadastro.',
           'Não foi possível cadastrar a transação!',
         );
+      } finally {
+        await sync();
       }
     },
     [navigate, type],
@@ -75,43 +84,54 @@ const Create: React.FC = () => {
   return (
     <>
       <Header />
-      <Container>
-        <Title>Cadastro</Title>
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <Input
-            name="title"
-            autoCapitalize="words"
-            placeholder="Nome"
-            returnKeyType="next"
-            onSubmitEditing={() => valueRef.current?.focus()}
-          />
-          <Input
-            ref={valueRef}
-            name="value"
-            keyboardType="number-pad"
-            placeholder="Preço"
-            returnKeyType="next"
-            onSubmitEditing={() => categoryRef.current?.focus()}
-          />
-          <TypeSelect onChange={(value: string) => setType(value)} />
-          {!!error && <Error>{error}</Error>}
-          <Input
-            ref={categoryRef}
-            name="category"
-            autoCapitalize="words"
-            placeholder="Categoria"
-            returnKeyType="next"
-            onSubmitEditing={() => formRef.current?.submitForm()}
-          />
-          <Button
-            onPress={() => {
-              formRef.current?.submitForm();
-            }}
-          >
-            <Text>Cadastrar</Text>
-          </Button>
-        </Form>
-      </Container>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        enabled
+      >
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <Container>
+            <Title>Cadastro</Title>
+            <Form ref={formRef} onSubmit={handleSubmit}>
+              <Input
+                name="title"
+                autoCapitalize="words"
+                placeholder="Nome"
+                returnKeyType="next"
+                onSubmitEditing={() => valueRef.current?.focus()}
+              />
+              <Input
+                ref={valueRef}
+                name="value"
+                keyboardType="number-pad"
+                placeholder="Preço"
+                returnKeyType="next"
+                onSubmitEditing={() => categoryRef.current?.focus()}
+              />
+              <TypeSelect onChange={(value: string) => setType(value)} />
+              {!!error && <Error>{error}</Error>}
+              <Input
+                ref={categoryRef}
+                name="category"
+                autoCapitalize="words"
+                placeholder="Categoria"
+                returnKeyType="send"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+              />
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                <Text>Cadastrar</Text>
+              </Button>
+            </Form>
+          </Container>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };

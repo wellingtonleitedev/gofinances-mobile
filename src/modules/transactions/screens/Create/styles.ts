@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import font from 'src/constants/font';
+import font from '../../../../constants/font';
 
 export const Container = styled.View`
   flex: 1;
