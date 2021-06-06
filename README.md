@@ -4,7 +4,7 @@
 </h1>
 
 <h4 align="center">
-  An application to manage your personal finances.
+  A mobile application to manage your personal finances.
 </h4>
 <p align="center">
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/wellingtonleitedev/gofinances-mobile.svg">
@@ -106,8 +106,6 @@ This project is under the MIT license. See the [LICENSE](https://github.com/well
 Made by Wellington Leite 👨‍💻 [Take a look!](https://www.linkedin.com/in/wellington-leite/)
 
 [nodejs]: https://nodejs.org/
-[express]: https://expressjs.com/
-[react]: https://reactjs.org/
 [native]: https://reactnative.dev/
 [ts]: https://www.typescriptlang.org/
 [styled-components]: https://styled-components.com/
