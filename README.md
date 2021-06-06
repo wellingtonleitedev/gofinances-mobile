@@ -13,11 +13,11 @@
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/wellingtonleitedev/gofinances-mobile.svg">
   
-  <a href="https://github.com/wellingtonleitedev/gofinances/commits/master">
+  <a href="https://github.com/wellingtonleitedev/gofinances-mobile/commits/master">
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/wellingtonleitedev/gofinances-mobile.svg">
   </a>
 
-  <a href="https://github.com/wellingtonleitedev/gofinances/issues">
+  <a href="https://github.com/wellingtonleitedev/gofinances-mobile/issues">
     <img alt="Repository issues" src="https://img.shields.io/github/issues/wellingtonleitedev/gofinances-mobile.svg">
   </a>
   
